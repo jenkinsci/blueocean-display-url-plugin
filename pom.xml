@@ -31,7 +31,7 @@
 
   <name>BlueOcean Display URL plugin</name>
   <description>Provides an implementation of the display url plugin for BlueOcean URLs</description>
-  <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url>
+  <url>https://wiki.jenkins-ci.org/display/JENKINS/BlueOcean+Display+URL+Plugin</url>
 
   <licenses>
     <license>
