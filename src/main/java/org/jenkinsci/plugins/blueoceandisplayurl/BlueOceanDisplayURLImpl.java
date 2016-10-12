@@ -39,12 +39,9 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
                 return getJobURL(((MultiBranchProject) job.getParent()))+ "detail/" +  Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
             }
         }
-        if(run.getParent() instanceof Job) {
-            Job job = ((Job) run.getParent());
-            return getJobURL(job) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
-        }
 
-        return null;
+        Job job = run.getParent();
+        return getJobURL(job) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
     }
 
     @Override
