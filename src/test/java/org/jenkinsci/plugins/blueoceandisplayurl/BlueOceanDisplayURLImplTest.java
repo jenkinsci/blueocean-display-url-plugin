@@ -53,7 +53,7 @@ public class BlueOceanDisplayURLImplTest {
     public void testProjectURL() throws Exception {
         FreeStyleProject p = j.createFreeStyleProject("abc");
         String url = getPath(DisplayURLProvider.get().getJobURL(p));
-        Assert.assertEquals("/jenkins/blue/organizations/jenkins/pipelines/abc/", url);
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/abc/", url);
     }
 
     @Test
@@ -61,15 +61,15 @@ public class BlueOceanDisplayURLImplTest {
         MockFolder folder = j.createFolder("test");
         Project p = folder.createProject(FreeStyleProject.class, "abc");
         String url = getPath(DisplayURLProvider.get().getJobURL(p));
-        Assert.assertEquals("/jenkins/blue/organizations/jenkins/pipelines/test%2Fabc/", url);
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/", url);
 
         p.scheduleBuild2(0).waitForStart();
 
         url = getPath(DisplayURLProvider.get().getRunURL(p.getLastBuild()));
-        Assert.assertEquals("/jenkins/blue/organizations/jenkins/pipelines/test%2Fabc/detail/abc/1/", url);
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/detail/abc/1/", url);
 
         url = getPath(DisplayURLProvider.get().getChangesURL(p.getLastBuild()));
-        Assert.assertEquals("/jenkins/blue/organizations/jenkins/pipelines/test%2Fabc/detail/abc/1/changes", url);
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/detail/abc/1/changes", url);
 
     }
 
@@ -86,10 +86,10 @@ public class BlueOceanDisplayURLImplTest {
 
         String url = getPath(DisplayURLProvider.get().getRunURL(job.getFirstBuild()));
 
-        Assert.assertEquals("/jenkins/blue/organizations/jenkins/pipelines/folder%2Ftest/detail/feature%2Ftest-1/1/", url);
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/", url);
 
         url = getPath(DisplayURLProvider.get().getChangesURL(job.getFirstBuild()));
-        Assert.assertEquals("/jenkins/blue/organizations/jenkins/pipelines/folder%2Ftest/detail/feature%2Ftest-1/1/changes", url);
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/changes", url);
     }
 
     public static class MultiBranchTestBuilder{
