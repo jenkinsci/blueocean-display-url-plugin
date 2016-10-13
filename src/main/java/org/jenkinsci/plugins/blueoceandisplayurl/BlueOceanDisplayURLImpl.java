@@ -52,7 +52,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     public String getJobURL(MultiBranchProject<?, ?> project) {
         String jobPath = Util.rawEncode(project.getFullName());
 
-        return getRoot() + "organizations/jenkins/pipelines/" + jobPath + "/";
+        return getRoot() + "organizations/jenkins/" + jobPath + "/";
     }
     @Override
     public String getJobURL(Job<?, ?> project) {
@@ -63,7 +63,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
             jobPath = Util.rawEncode(project.getFullName());
         }
 
-        return getRoot() + "organizations/jenkins/pipelines/" + jobPath + "/";
+        return getRoot() + "organizations/jenkins/" + jobPath + "/";
     }
 
     @Override
