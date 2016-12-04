@@ -18,6 +18,12 @@ import org.jenkinsci.plugins.workflow.job.WorkflowRun;
  */
 @Extension
 public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
+
+    @Override
+    public String getDisplayName() {
+        return "Blue Ocean";
+    }
+
     @Override
     public String getRoot() {
         Jenkins jenkins = Jenkins.getInstance();
