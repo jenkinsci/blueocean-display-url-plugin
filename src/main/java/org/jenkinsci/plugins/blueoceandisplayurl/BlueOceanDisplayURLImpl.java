@@ -99,11 +99,21 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     static boolean isSupported(Run<?, ?> run) {
-        return SUPPORTED_RUNS.contains(run.getClass());
+        for (Class<?> aClass : SUPPORTED_RUNS) {
+            if (aClass.isInstance(run)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static boolean isSupported(Job<?, ?> job) {
-        return SUPPORTED_JOBS.contains(job.getClass());
+        for (Class<?> aClass : SUPPORTED_JOBS) {
+            if (aClass.isInstance(job)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String getJobURL(MultiBranchProject<?, ?> project) {
