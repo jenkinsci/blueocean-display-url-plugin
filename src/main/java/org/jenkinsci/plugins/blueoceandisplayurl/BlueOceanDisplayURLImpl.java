@@ -23,8 +23,17 @@ import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 @Extension
 public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
-    private static final ImmutableSet<? extends Class<? extends Run>> SUPPORTED_RUNS = ImmutableSet.of(FreeStyleBuild.class, WorkflowRun.class, AbstractMavenBuild.class);
-    private static final ImmutableSet<? extends Class<? extends hudson.model.AbstractItem>> SUPPORTED_JOBS = ImmutableSet.of(MultiBranchProject.class, FreeStyleProject.class, AbstractMavenProject.class);
+    private static final ImmutableSet<? extends Class<? extends Run>> SUPPORTED_RUNS = ImmutableSet.of(
+            FreeStyleBuild.class,
+            WorkflowRun.class,
+            AbstractMavenBuild.class
+    );
+
+    private static final ImmutableSet<? extends Class<? extends hudson.model.AbstractItem>> SUPPORTED_JOBS = ImmutableSet.of(
+            MultiBranchProject.class,
+            FreeStyleProject.class,
+            AbstractMavenProject.class
+    );
 
     @Override
     public String getDisplayName() {
