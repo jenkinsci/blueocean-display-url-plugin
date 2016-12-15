@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import hudson.Extension;
 import hudson.Util;
 import hudson.maven.AbstractMavenBuild;
+import hudson.maven.AbstractMavenProject;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Job;
@@ -23,7 +24,7 @@ import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
     private static final ImmutableSet<? extends Class<? extends Run>> SUPPORTED_RUNS = ImmutableSet.of(FreeStyleBuild.class, WorkflowRun.class, AbstractMavenBuild.class);
-    private static final ImmutableSet<? extends Class<? extends hudson.model.AbstractItem>> SUPPORTED_JOBS = ImmutableSet.of(MultiBranchProject.class, FreeStyleProject.class);
+    private static final ImmutableSet<? extends Class<? extends hudson.model.AbstractItem>> SUPPORTED_JOBS = ImmutableSet.of(MultiBranchProject.class, FreeStyleProject.class, AbstractMavenProject.class);
 
     @Override
     public String getDisplayName() {
