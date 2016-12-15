@@ -30,6 +30,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     );
 
     private static final ImmutableSet<? extends Class<? extends hudson.model.AbstractItem>> SUPPORTED_JOBS = ImmutableSet.of(
+            WorkflowJob.class,
             MultiBranchProject.class,
             FreeStyleProject.class,
             AbstractMavenProject.class
