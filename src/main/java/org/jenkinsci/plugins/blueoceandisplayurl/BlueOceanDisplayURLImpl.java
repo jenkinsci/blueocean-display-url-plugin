@@ -1,13 +1,16 @@
 package org.jenkinsci.plugins.blueoceandisplayurl;
 
+import com.google.common.collect.ImmutableSet;
 import hudson.Extension;
 import hudson.Util;
+import hudson.maven.AbstractMavenBuild;
+import hudson.model.FreeStyleBuild;
+import hudson.model.FreeStyleProject;
 import hudson.model.Job;
 import hudson.model.Run;
-import jenkins.model.Jenkins;
-
 import hudson.tasks.test.TestResult;
 import jenkins.branch.MultiBranchProject;
+import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.displayurlapi.DisplayURLProvider;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
@@ -18,6 +21,9 @@ import org.jenkinsci.plugins.workflow.job.WorkflowRun;
  */
 @Extension
 public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
+
+    private static final ImmutableSet<? extends Class<? extends Run>> SUPPORTED_RUNS = ImmutableSet.of(FreeStyleBuild.class, WorkflowRun.class, AbstractMavenBuild.class);
+    private static final ImmutableSet<? extends Class<? extends hudson.model.AbstractItem>> SUPPORTED_JOBS = ImmutableSet.of(MultiBranchProject.class, FreeStyleProject.class);
 
     @Override
     public String getDisplayName() {
@@ -39,41 +45,60 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
     @Override
     public String getRunURL(Run<?, ?> run) {
-        if(run instanceof WorkflowRun) {
-            WorkflowJob job =  ((WorkflowRun) run).getParent();
-            if(job.getParent() instanceof MultiBranchProject) {
-                return getJobURL(((MultiBranchProject) job.getParent()))+ "detail/" +  Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
+        if (isSupported(run)) {
+            if (run instanceof WorkflowRun) {
+                WorkflowJob job = ((WorkflowRun) run).getParent();
+                if (job.getParent() instanceof MultiBranchProject) {
+                    return getJobURL(((MultiBranchProject) job.getParent())) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
+                }
             }
+            Job job = run.getParent();
+            return getJobURL(job) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
+        } else {
+            return DisplayURLProvider.getDefault().getRunURL(run);
         }
-
-        Job job = run.getParent();
-        return getJobURL(job) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
     }
 
     @Override
     public String getChangesURL(Run<?, ?> run) {
-        return getRunURL(run) + "changes";
-    }
-
-    public String getJobURL(MultiBranchProject<?, ?> project) {
-        String jobPath = Util.rawEncode(project.getFullName());
-
-        return getRoot() + "organizations/jenkins/" + jobPath + "/";
-    }
-    @Override
-    public String getJobURL(Job<?, ?> project) {
-        String jobPath;
-        if(project.getParent() instanceof MultiBranchProject) {
-            jobPath = Util.rawEncode(project.getParent().getFullName());
+        if (isSupported(run)) {
+            return getRunURL(run) + "changes";
         } else {
-            jobPath = Util.rawEncode(project.getFullName());
+            return DisplayURLProvider.getDefault().getChangesURL(run);
         }
+    }
 
-        return getRoot() + "organizations/jenkins/" + jobPath + "/";
+    @Override
+    public String getJobURL(Job<?, ?> job) {
+        if (isSupported(job)) {
+            String jobPath;
+            if(job.getParent() instanceof MultiBranchProject) {
+                jobPath = Util.rawEncode(job.getParent().getFullName());
+            } else {
+                jobPath = Util.rawEncode(job.getFullName());
+            }
+            return getRoot() + "organizations/jenkins/" + jobPath + "/";
+        } else {
+            return DisplayURLProvider.getDefault().getJobURL(job);
+        }
     }
 
     @Override
     public String getTestUrl(TestResult result) {
         return getRunURL(result.getRun()) + "/tests";
+    }
+
+    static boolean isSupported(Run<?, ?> run) {
+        return SUPPORTED_RUNS.contains(run.getClass());
+    }
+
+    static boolean isSupported(Job<?, ?> job) {
+        return SUPPORTED_JOBS.contains(job.getClass());
+    }
+
+    private String getJobURL(MultiBranchProject<?, ?> project) {
+        String jobPath = Util.rawEncode(project.getFullName());
+
+        return getRoot() + "organizations/jenkins/" + jobPath + "/";
     }
 }
