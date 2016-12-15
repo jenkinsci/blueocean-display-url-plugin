@@ -16,6 +16,8 @@ import org.jenkinsci.plugins.displayurlapi.DisplayURLProvider;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 
+import java.util.Set;
+
 
 /**
  *`@author Ivan Meredith
@@ -23,13 +25,13 @@ import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 @Extension
 public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
-    private static final ImmutableSet<? extends Class<? extends Run>> SUPPORTED_RUNS = ImmutableSet.of(
+    private static final Set<Class> SUPPORTED_RUNS = ImmutableSet.<Class>of(
             FreeStyleBuild.class,
             WorkflowRun.class,
             AbstractMavenBuild.class
     );
 
-    private static final ImmutableSet<? extends Class<? extends hudson.model.AbstractItem>> SUPPORTED_JOBS = ImmutableSet.of(
+    private static final Set<Class> SUPPORTED_JOBS = ImmutableSet.<Class>of(
             WorkflowJob.class,
             MultiBranchProject.class,
             FreeStyleProject.class,
@@ -100,17 +102,16 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     static boolean isSupported(Run<?, ?> run) {
-        for (Class<?> aClass : SUPPORTED_RUNS) {
-            if (aClass.isInstance(run)) {
-                return true;
-            }
-        }
-        return false;
+        return isInstance(run, SUPPORTED_RUNS);
     }
 
     static boolean isSupported(Job<?, ?> job) {
-        for (Class<?> aClass : SUPPORTED_JOBS) {
-            if (aClass.isInstance(job)) {
+        return isInstance(job, SUPPORTED_JOBS);
+    }
+
+    static boolean isInstance(Object o, Set<Class> classes) {
+        for (Class<?> aClass : classes) {
+            if (aClass.isInstance(o)) {
                 return true;
             }
         }
