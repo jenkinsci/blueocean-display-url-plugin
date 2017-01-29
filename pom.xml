@@ -9,7 +9,6 @@
     <relativePath />
   </parent>
 
-  <groupId>org.jenkins-ci.plugins</groupId>
   <artifactId>blueocean-display-url</artifactId>
   <version>1.4-beta-3-SNAPSHOT</version>
   <packaging>hpi</packaging>
@@ -75,11 +74,6 @@
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-job</artifactId>
       <version>2.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.main</groupId>
-      <artifactId>maven-plugin</artifactId>
-      <version>2.14</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
