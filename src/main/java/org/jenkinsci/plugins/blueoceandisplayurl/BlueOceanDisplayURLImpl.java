@@ -3,8 +3,6 @@ package org.jenkinsci.plugins.blueoceandisplayurl;
 import com.google.common.collect.ImmutableSet;
 import hudson.Extension;
 import hudson.Util;
-import hudson.maven.AbstractMavenBuild;
-import hudson.maven.AbstractMavenProject;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Job;
@@ -25,17 +23,17 @@ import java.util.Set;
 @Extension
 public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
-    private static final Set<Class> SUPPORTED_RUNS = ImmutableSet.<Class>of(
-            FreeStyleBuild.class,
-            WorkflowRun.class,
-            AbstractMavenBuild.class
+    private static final Set<String> SUPPORTED_RUNS = ImmutableSet.of(
+            FreeStyleBuild.class.getName(),
+            WorkflowRun.class.getName(),
+            "hudson.maven.AbstractMavenBuild"
     );
 
-    private static final Set<Class> SUPPORTED_JOBS = ImmutableSet.<Class>of(
-            WorkflowJob.class,
-            MultiBranchProject.class,
-            FreeStyleProject.class,
-            AbstractMavenProject.class
+    private static final Set<String> SUPPORTED_JOBS = ImmutableSet.of(
+            WorkflowJob.class.getName(),
+            MultiBranchProject.class.getName(),
+            FreeStyleProject.class.getName(),
+            "hudson.maven.AbstractMavenProject"
     );
 
     @Override
@@ -109,9 +107,9 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         return isInstance(job, SUPPORTED_JOBS);
     }
 
-    static boolean isInstance(Object o, Set<Class> classes) {
-        for (Class<?> aClass : classes) {
-            if (aClass.isInstance(o)) {
+    static boolean isInstance(Object o, Set<String> clazzes) {
+        for (String clazz : clazzes) {
+            if (o != null && o.getClass().getName().equals(clazz)) {
                 return true;
             }
         }
