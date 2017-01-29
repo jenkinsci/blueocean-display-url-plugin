@@ -1,5 +1,9 @@
 package org.jenkinsci.plugins.blueoceandisplayurl;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import com.google.inject.Inject;
 import hudson.model.FreeStyleProject;
 import hudson.model.Project;
 import jenkins.branch.BranchProperty;
@@ -49,10 +53,12 @@ public class BlueOceanDisplayURLImplTest {
     @Rule
     public GitSampleRepoRule repo = new GitSampleRepoRule();
 
+    DisplayURLProvider displayURL;
+
     @Test
     public void testProjectURL() throws Exception {
         FreeStyleProject p = j.createFreeStyleProject("abc");
-        String url = getPath(DisplayURLProvider.get().getJobURL(p));
+        String url = getPath(displayURL.getJobURL(p));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/abc/", url);
     }
 
@@ -60,15 +66,15 @@ public class BlueOceanDisplayURLImplTest {
     public void testProjectInFolder() throws Exception {
         MockFolder folder = j.createFolder("test");
         Project p = folder.createProject(FreeStyleProject.class, "abc");
-        String url = getPath(DisplayURLProvider.get().getJobURL(p));
+        String url = getPath(displayURL.getJobURL(p));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/", url);
 
         p.scheduleBuild2(0).waitForStart();
 
-        url = getPath(DisplayURLProvider.get().getRunURL(p.getLastBuild()));
+        url = getPath(displayURL.getRunURL(p.getLastBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/detail/abc/1/", url);
 
-        url = getPath(DisplayURLProvider.get().getChangesURL(p.getLastBuild()));
+        url = getPath(displayURL.getChangesURL(p.getLastBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/detail/abc/1/changes", url);
 
     }
@@ -84,12 +90,17 @@ public class BlueOceanDisplayURLImplTest {
 
         WorkflowJob job = mp.scheduleAndFindBranchProject("feature%2Ftest-1");
 
-        String url = getPath(DisplayURLProvider.get().getRunURL(job.getFirstBuild()));
+        String url = getPath(displayURL.getRunURL(job.getFirstBuild()));
 
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/", url);
 
-        url = getPath(DisplayURLProvider.get().getChangesURL(job.getFirstBuild()));
+        url = getPath(displayURL.getChangesURL(job.getFirstBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/changes", url);
+    }
+
+    @Before
+    public void setUp() {
+        displayURL = Iterables.find(DisplayURLProvider.all(), Predicates.instanceOf(BlueOceanDisplayURLImpl.class));
     }
 
     public static class MultiBranchTestBuilder{
