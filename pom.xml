@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>blueocean-display-url</artifactId>
-  <version>1.4-beta-3-SNAPSHOT</version>
+  <version>1.5-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <properties>
@@ -68,7 +68,7 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>display-url-api</artifactId>
-      <version>1.0-beta-2</version>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
