@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>blueocean-display-url</artifactId>
-  <version>1.6.1</version>
+  <version>1.6.2-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <properties>
@@ -50,7 +50,7 @@
     <connection>scm:git:git://github.com/jenkinsci/blueocean-display-url-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/blueocean-display-url-plugin.git</developerConnection>
     <url>http://github.com/jenkinsci/blueocean-display-url-plugin</url>
-    <tag>blueocean-display-url-1.6.1</tag>
+    <tag>HEAD</tag>
   </scm>
   <repositories>
     <repository>
