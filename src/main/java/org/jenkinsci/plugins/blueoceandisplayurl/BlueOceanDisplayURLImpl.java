@@ -7,7 +7,6 @@ import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Job;
 import hudson.model.Run;
-import hudson.tasks.test.TestResult;
 import jenkins.branch.MultiBranchProject;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.displayurlapi.DisplayURLProvider;
@@ -94,20 +93,15 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         }
     }
 
-    @Override
-    public String getTestUrl(TestResult result) {
-        return getRunURL(result.getRun()) + "/tests";
-    }
-
-    static boolean isSupported(Run<?, ?> run) {
+    private static boolean isSupported(Run<?, ?> run) {
         return isInstance(run, SUPPORTED_RUNS);
     }
 
-    static boolean isSupported(Job<?, ?> job) {
+    private static boolean isSupported(Job<?, ?> job) {
         return isInstance(job, SUPPORTED_JOBS);
     }
 
-    static boolean isInstance(Object o, Set<String> clazzes) {
+    private static boolean isInstance(Object o, Set<String> clazzes) {
         for (String clazz : clazzes) {
             if (o != null && o.getClass().getName().equals(clazz)) {
                 return true;
