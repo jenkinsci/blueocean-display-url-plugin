@@ -1,5 +1,5 @@
 pipeline {
-  agent docker:'cloudbees/java-build-tools'
+  agent { docker 'maven' }
   stages {
     stage('build') {
       steps {
@@ -8,9 +8,6 @@ pipeline {
     }
   }
   postBuild {
-    success {
-      archive 'target/blueocean-pipeline-editor.hpi'
-    }
     always {
       junit 'target/**/*.xml'
     }
