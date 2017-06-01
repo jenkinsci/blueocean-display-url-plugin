@@ -7,7 +7,7 @@ pipeline {
       }
     }
   }
-  postBuild {
+  post {
     always {
       junit 'target/**/*.xml'
     }
