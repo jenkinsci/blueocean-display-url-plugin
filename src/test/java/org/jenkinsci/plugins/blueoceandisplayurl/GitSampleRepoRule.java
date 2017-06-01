@@ -44,7 +44,7 @@ public final class GitSampleRepoRule extends AbstractSampleDVCSRepoRule {
         git("init");
         write("file", "");
         git("add", "file");
-        git("commit", "--message=init");
+        git("commit", "--message=init", "--author", "\"Bob McBobbington <bob@example.com>\"");
     }
 
     public GitSampleRepoRule notifyCommit(JenkinsRule r) throws Exception {
@@ -81,7 +81,7 @@ public final class GitSampleRepoRule extends AbstractSampleDVCSRepoRule {
     }
 
     public GitSampleRepoRule commit(String msg) throws Exception {
-        git("commit", "--all", "--message='"+msg+"'");
+        git("commit", "--all", "--message='" + msg + "'", "--author", "\"Bob McBobbington <bob@example.com>\"");
         return this;
     }
 
