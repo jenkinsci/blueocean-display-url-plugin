@@ -1,15 +1,14 @@
 package org.jenkinsci.plugins.blueoceandisplayurl;
 
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
-import com.google.inject.Inject;
 import hudson.model.FreeStyleProject;
 import hudson.model.Project;
 import jenkins.branch.BranchProperty;
 import jenkins.branch.BranchSource;
 import jenkins.branch.DefaultBranchPropertyStrategy;
 import jenkins.plugins.git.GitSCMSource;
+import jenkins.plugins.git.GitSampleRepoRule;
 import jenkins.scm.api.SCMSource;
 import org.jenkinsci.plugins.displayurlapi.DisplayURLProvider;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
@@ -34,10 +33,20 @@ import static org.junit.Assert.fail;
  */
 public class BlueOceanDisplayURLImplTest {
 
+    @Rule
+    public JenkinsRule j = new JenkinsRule();
+
+    @Rule
+    public GitSampleRepoRule gitSampleRepoRule = new GitSampleRepoRule();
+
+    DisplayURLProvider displayURL;
+
+    private GitUtil repo;
 
     @Before
     public void before() throws Exception {
-        repo.init();
+        gitSampleRepoRule.init();
+        this.repo = new GitUtil(gitSampleRepoRule);
 
     }
     Pattern pathPAttern = Pattern.compile("http://.+:[0-9]+(/.*)");
@@ -46,14 +55,6 @@ public class BlueOceanDisplayURLImplTest {
         m.matches();
         return m.group(1);
     }
-
-    @Rule
-    public JenkinsRule j = new JenkinsRule();
-
-    @Rule
-    public GitSampleRepoRule repo = new GitSampleRepoRule();
-
-    DisplayURLProvider displayURL;
 
     @Test
     public void testProjectURL() throws Exception {
@@ -86,7 +87,7 @@ public class BlueOceanDisplayURLImplTest {
                 .addFile("Jenkinsfile")
                 .commit("Initial commit to feature/test-1");
 
-        MultiBranchTestBuilder mp = MultiBranchTestBuilder.createProjectInFolder(j, "folder", "test", repo);
+        MultiBranchTestBuilder mp = MultiBranchTestBuilder.createProjectInFolder(j, "folder", "test", gitSampleRepoRule);
 
         WorkflowJob job = mp.scheduleAndFindBranchProject("feature%2Ftest-1");
 

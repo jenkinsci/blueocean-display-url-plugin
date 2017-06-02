@@ -24,48 +24,46 @@
 
 package org.jenkinsci.plugins.blueoceandisplayurl;
 
-import org.apache.commons.io.FileUtils;
+import jenkins.plugins.git.GitSampleRepoRule;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public abstract class AbstractSampleDVCSRepoRule extends AbstractSampleRepoRule {
-
-    protected File sampleRepo;
-
-    @Override protected void before() throws Throwable {
-        super.before();
-        sampleRepo = tmp.newFolder();
+/**
+ * Manages a sample Git repository.
+ */
+public final class GitUtil {
+    private final GitSampleRepoRule gitSampleRepoRule;
+    public GitUtil(GitSampleRepoRule gitSampleRepoRule) {
+        this.gitSampleRepoRule = gitSampleRepoRule;
     }
 
-    public final void write(String rel, String text) throws IOException {
-        FileUtils.write(new File(sampleRepo, rel), text);
+    public void git(String... cmds) throws Exception {
+        gitSampleRepoRule.git(cmds);
     }
 
-    @Override public final String toString() {
-        return sampleRepo.getAbsolutePath();
+    public GitUtil checkoutNewBranch(String branchName) throws Exception {
+        git("checkout", "-b", branchName);
+        return this;
     }
 
-    public abstract void init() throws Exception;
-
-    protected final void run(String tool, String... cmds) throws Exception {
-        List<String> args = new ArrayList<String>();
-        args.add(tool);
-        args.addAll(Arrays.asList(cmds));
-        run(false, sampleRepo, args.toArray(new String[args.size()]));
+    public GitUtil writeFile(String fileName, String fileContents) throws IOException {
+        gitSampleRepoRule.write(fileName, fileContents);
+        return this;
     }
 
-    public final String bareUrl() throws UnsupportedEncodingException {
-        return URLEncoder.encode(toString(), "UTF-8");
+    public GitUtil writeJenkinsFile(BlueOceanDisplayURLImplTest.JenkinsFile file) throws IOException {
+        gitSampleRepoRule.write("Jenkinsfile", file.getFileContents());
+        return this;
     }
 
-    public final String fileUrl() {
-        return sampleRepo.toURI().toString();
+    public GitUtil addFile(String fileName) throws Exception {
+        git("add", fileName);
+        return this;
+    }
+
+    public GitUtil commit(String msg) throws Exception {
+        git("commit", "--all", "--message='"+msg+"'");
+        return this;
     }
 
 }
