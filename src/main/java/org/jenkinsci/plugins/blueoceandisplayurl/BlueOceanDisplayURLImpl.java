@@ -5,8 +5,11 @@ import hudson.Extension;
 import hudson.Util;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
+import hudson.model.ItemGroup;
 import hudson.model.Job;
 import hudson.model.Run;
+import io.jenkins.blueocean.rest.factory.organization.OrganizationFactory;
+import io.jenkins.blueocean.rest.model.BlueOrganization;
 import jenkins.branch.MultiBranchProject;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.displayurlapi.DisplayURLProvider;
@@ -43,9 +46,6 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     @Override
     public String getRoot() {
         Jenkins jenkins = Jenkins.getInstance();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins has not started");
-        }
         String root = jenkins.getRootUrl();
         if (root == null) {
             root = "http://unconfigured-jenkins-location/";
@@ -55,18 +55,19 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
     @Override
     public String getRunURL(Run<?, ?> run) {
-        if (isSupported(run)) {
-            if (run instanceof WorkflowRun) {
-                WorkflowJob job = ((WorkflowRun) run).getParent();
-                if (job.getParent() instanceof MultiBranchProject) {
-                    return getJobURL(((MultiBranchProject) job.getParent())) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
-                }
-            }
-            Job job = run.getParent();
-            return getJobURL(job) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
-        } else {
+        BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(run.getParent());
+        if (organization == null || !isSupported(run)) {
             return DisplayURLProvider.getDefault().getRunURL(run);
         }
+
+        if (run instanceof WorkflowRun) {
+            WorkflowJob job = ((WorkflowRun) run).getParent();
+            if (job.getParent() instanceof MultiBranchProject) {
+                return getJobURL(organization, ((MultiBranchProject) job.getParent())) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
+            }
+        }
+        Job job = run.getParent();
+        return getJobURL(organization, job) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
     }
 
     @Override
@@ -80,17 +81,16 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
     @Override
     public String getJobURL(Job<?, ?> job) {
-        if (isSupported(job)) {
-            String jobPath;
-            if(job.getParent() instanceof MultiBranchProject) {
-                jobPath = Util.rawEncode(job.getParent().getFullName());
-            } else {
-                jobPath = Util.rawEncode(job.getFullName());
-            }
-            return getRoot() + "organizations/jenkins/" + jobPath + "/";
-        } else {
+        BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(job);
+        if (organization == null || !isSupported(job)) {
             return DisplayURLProvider.getDefault().getJobURL(job);
         }
+        return getJobURL(organization, job);
+    }
+
+    private String getJobURL(BlueOrganization organization, Job<?, ?> job) {
+        String jobPath = job.getParent() instanceof MultiBranchProject ? job.getParent().getFullName() : job.getFullName();
+        return getRoot() + "organizations/" + Util.rawEncode(organization.getName()) +  "/" + Util.rawEncode(jobPath) + "/";
     }
 
     private static boolean isSupported(Run<?, ?> run) {
@@ -110,9 +110,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         return false;
     }
 
-    private String getJobURL(MultiBranchProject<?, ?> project) {
-        String jobPath = Util.rawEncode(project.getFullName());
-
-        return getRoot() + "organizations/jenkins/" + jobPath + "/";
+    private String getJobURL(BlueOrganization organization, MultiBranchProject<?, ?> project) {
+        return getRoot() + "organizations/" + Util.rawEncode(organization.getName()) + "/" + Util.rawEncode(project.getFullName()) + "/";
     }
 }

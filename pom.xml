@@ -27,6 +27,7 @@
     -->
     <scm-api.version>2.1.1</scm-api.version>
     <git.version>3.3.0</git.version>
+    <blueocean.version>1.1.5</blueocean.version>
   </properties>
 
   <name>Display URL for Blue Ocean</name>
@@ -67,6 +68,17 @@
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
+    <dependency>
+      <groupId>io.jenkins.blueocean</groupId>
+      <artifactId>blueocean-rest</artifactId>
+      <version>${blueocean.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jenkins.blueocean</groupId>
+      <artifactId>blueocean-rest-impl</artifactId>
+      <version>${blueocean.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>display-url-api</artifactId>
