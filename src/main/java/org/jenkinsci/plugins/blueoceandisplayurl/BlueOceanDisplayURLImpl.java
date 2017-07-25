@@ -63,11 +63,13 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         if (run instanceof WorkflowRun) {
             WorkflowJob job = ((WorkflowRun) run).getParent();
             if (job.getParent() instanceof MultiBranchProject) {
-                return getJobURL(organization, ((MultiBranchProject) job.getParent())) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
+                String jobURL = getJobURL(organization, ((MultiBranchProject) job.getParent()));
+                return String.format("%sdetail/%s/%d/", jobURL, Util.rawEncode(job.getDisplayName()), run.getNumber());
             }
         }
         Job job = run.getParent();
-        return getJobURL(organization, job) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
+        String jobURL = getJobURL(organization, job);
+        return String.format("%sdetail/%s/%d/", jobURL, Util.rawEncode(job.getDisplayName()), run.getNumber());
     }
 
     @Override
@@ -90,7 +92,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
     private String getJobURL(BlueOrganization organization, Job<?, ?> job) {
         String jobPath = job.getParent() instanceof MultiBranchProject ? job.getParent().getFullName() : job.getFullName();
-        return getRoot() + "organizations/" + Util.rawEncode(organization.getName()) +  "/" + Util.rawEncode(jobPath) + "/";
+        return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(jobPath));
     }
 
     private static boolean isSupported(Run<?, ?> run) {
@@ -111,6 +113,6 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     private String getJobURL(BlueOrganization organization, MultiBranchProject<?, ?> project) {
-        return getRoot() + "organizations/" + Util.rawEncode(organization.getName()) + "/" + Util.rawEncode(project.getFullName()) + "/";
+        return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(project.getFullName()));
     }
 }
