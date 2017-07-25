@@ -96,7 +96,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     private String getJobURL(BlueOrganization organization, Job<?, ?> job) {
-        String jobPath = job.getParent() instanceof MultiBranchProject ? getFullName(organization, job.getParent()) : getFullName(organization, job);
+        String jobPath = job.getParent() instanceof MultiBranchProject ? getFullNameForItemGroup(organization, job.getParent()) : getFullNameForItem(organization, job);
         return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(jobPath));
     }
 
@@ -118,7 +118,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     private String getJobURL(BlueOrganization organization, MultiBranchProject<?, ?> project) {
-        return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(getFullName(organization, (Item) project)));
+        return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(getFullNameForItem(organization, project)));
     }
 
     /**
@@ -128,7 +128,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
      * @param item to return the full name of
      * @return
      */
-    private static String getFullName(@Nullable BlueOrganization org, @Nonnull Item item) {
+    private static String getFullNameForItem(@Nullable BlueOrganization org, @Nonnull Item item) {
         ItemGroup<?> group = getBaseGroup(org);
         return Functions.getRelativeNameFrom(item, group);
     }
@@ -140,9 +140,9 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
      * @param itemGroup to return the full name of
      * @return
      */
-    private static String getFullName(@Nullable BlueOrganization org, @Nonnull ItemGroup itemGroup) {
+    private static String getFullNameForItemGroup(@Nullable BlueOrganization org, @Nonnull ItemGroup itemGroup) {
         if (itemGroup instanceof Item) {
-            return getFullName(org, itemGroup);
+            return getFullNameForItem(org, (Item)itemGroup);
         } else {
             return itemGroup.getFullName();
         }
