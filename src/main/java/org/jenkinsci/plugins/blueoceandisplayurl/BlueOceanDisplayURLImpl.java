@@ -2,11 +2,17 @@ package org.jenkinsci.plugins.blueoceandisplayurl;
 
 import com.google.common.collect.ImmutableSet;
 import hudson.Extension;
+import hudson.Functions;
 import hudson.Util;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
+import hudson.model.Item;
+import hudson.model.ItemGroup;
 import hudson.model.Job;
 import hudson.model.Run;
+import io.jenkins.blueocean.rest.factory.organization.AbstractOrganization;
+import io.jenkins.blueocean.rest.factory.organization.OrganizationFactory;
+import io.jenkins.blueocean.rest.model.BlueOrganization;
 import jenkins.branch.MultiBranchProject;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.displayurlapi.DisplayURLProvider;
@@ -15,6 +21,8 @@ import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  *`@author Ivan Meredith
@@ -43,9 +51,6 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     @Override
     public String getRoot() {
         Jenkins jenkins = Jenkins.getInstance();
-        if (jenkins == null) {
-            throw new IllegalStateException("Jenkins has not started");
-        }
         String root = jenkins.getRootUrl();
         if (root == null) {
             root = "http://unconfigured-jenkins-location/";
@@ -55,18 +60,21 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
     @Override
     public String getRunURL(Run<?, ?> run) {
-        if (isSupported(run)) {
-            if (run instanceof WorkflowRun) {
-                WorkflowJob job = ((WorkflowRun) run).getParent();
-                if (job.getParent() instanceof MultiBranchProject) {
-                    return getJobURL(((MultiBranchProject) job.getParent())) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
-                }
-            }
-            Job job = run.getParent();
-            return getJobURL(job) + "detail/" + Util.rawEncode(job.getDisplayName()) + "/" + run.getNumber() + "/";
-        } else {
+        BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(run.getParent());
+        if (organization == null || !isSupported(run)) {
             return DisplayURLProvider.getDefault().getRunURL(run);
         }
+
+        if (run instanceof WorkflowRun) {
+            WorkflowJob job = ((WorkflowRun) run).getParent();
+            if (job.getParent() instanceof MultiBranchProject) {
+                String jobURL = getJobURL(organization, ((MultiBranchProject) job.getParent()));
+                return String.format("%sdetail/%s/%d/", jobURL, Util.rawEncode(job.getDisplayName()), run.getNumber());
+            }
+        }
+        Job job = run.getParent();
+        String jobURL = getJobURL(organization, job);
+        return String.format("%sdetail/%s/%d/", jobURL, Util.rawEncode(job.getDisplayName()), run.getNumber());
     }
 
     @Override
@@ -80,17 +88,16 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
     @Override
     public String getJobURL(Job<?, ?> job) {
-        if (isSupported(job)) {
-            String jobPath;
-            if(job.getParent() instanceof MultiBranchProject) {
-                jobPath = Util.rawEncode(job.getParent().getFullName());
-            } else {
-                jobPath = Util.rawEncode(job.getFullName());
-            }
-            return getRoot() + "organizations/jenkins/" + jobPath + "/";
-        } else {
+        BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(job);
+        if (organization == null || !isSupported(job)) {
             return DisplayURLProvider.getDefault().getJobURL(job);
         }
+        return getJobURL(organization, job);
+    }
+
+    private String getJobURL(BlueOrganization organization, Job<?, ?> job) {
+        String jobPath = job.getParent() instanceof MultiBranchProject ? getFullName(organization, job.getParent()) : getFullName(organization, job);
+        return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(jobPath));
     }
 
     private static boolean isSupported(Run<?, ?> run) {
@@ -110,9 +117,49 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         return false;
     }
 
-    private String getJobURL(MultiBranchProject<?, ?> project) {
-        String jobPath = Util.rawEncode(project.getFullName());
-
-        return getRoot() + "organizations/jenkins/" + jobPath + "/";
+    private String getJobURL(BlueOrganization organization, MultiBranchProject<?, ?> project) {
+        return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(getFullName(organization, (Item) project)));
     }
+
+    /**
+     * Returns full name relative to the <code>BlueOrganization</code> base. Each name is separated by '/'
+     *
+     * @param org the organization the item belongs to
+     * @param item to return the full name of
+     * @return
+     */
+    private static String getFullName(@Nullable BlueOrganization org, @Nonnull Item item) {
+        ItemGroup<?> group = getBaseGroup(org);
+        return Functions.getRelativeNameFrom(item, group);
+    }
+
+    /**
+     * Returns full name relative to the <code>BlueOrganization</code> base. Each name is separated by '/'
+     *
+     * @param org the organization the item belongs to
+     * @param itemGroup to return the full name of
+     * @return
+     */
+    private static String getFullName(@Nullable BlueOrganization org, @Nonnull ItemGroup itemGroup) {
+        if (itemGroup instanceof Item) {
+            return getFullName(org, itemGroup);
+        } else {
+            return itemGroup.getFullName();
+        }
+    }
+
+    /**
+     * Tries to obtain the base group for a <code>BlueOrganization</code>
+     *
+     * @param org to get the base group of
+     * @return the base group
+     */
+    private static ItemGroup<?> getBaseGroup(BlueOrganization org) {
+        ItemGroup<?> group = null;
+        if (org != null && org instanceof AbstractOrganization) {
+            group = ((AbstractOrganization) org).getGroup();
+        }
+        return group;
+    }
+
 }
