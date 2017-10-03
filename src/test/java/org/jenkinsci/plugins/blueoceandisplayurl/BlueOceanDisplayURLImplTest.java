@@ -108,7 +108,7 @@ public class BlueOceanDisplayURLImplTest {
         String url = getPath(displayURL.getJobURL(p));
         Assert.assertEquals("/jenkins/blue/organizations/TestOrg/abc/", url);
     }
-    
+
     @Test
     public void testProjectInFolder() throws Exception {
         MockFolder folder = j.createFolder("test");
