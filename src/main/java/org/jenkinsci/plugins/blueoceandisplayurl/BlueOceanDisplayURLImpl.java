@@ -69,12 +69,12 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
             WorkflowJob job = ((WorkflowRun) run).getParent();
             if (job.getParent() instanceof MultiBranchProject) {
                 String jobURL = getJobURL(organization, ((MultiBranchProject) job.getParent()));
-                return String.format("%sdetail/%s/%d/", jobURL, Util.rawEncode(job.getDisplayName()), run.getNumber());
+                return String.format("%sdetail/%s/%d/", jobURL, job.getName(), run.getNumber());
             }
         }
         Job job = run.getParent();
         String jobURL = getJobURL(organization, job);
-        return String.format("%sdetail/%s/%d/", jobURL, Util.rawEncode(job.getDisplayName()), run.getNumber());
+        return String.format("%sdetail/%s/%d/", jobURL, Util.rawEncode(job.getName()), run.getNumber());
     }
 
     @Override

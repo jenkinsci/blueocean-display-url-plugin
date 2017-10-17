@@ -100,8 +100,8 @@ public class BlueOceanDisplayURLImplTest {
         FreeStyleProject p = j.createFreeStyleProject("abc");
         String url = getPath(displayURL.getJobURL(p));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/abc/", url);
-    }
 
+    }
     @Test
     public void testProjectURL_CustomOrganization() throws Exception {
         FreeStyleProject p = orgFolder.createProject(FreeStyleProject.class, "abc");
@@ -113,6 +113,7 @@ public class BlueOceanDisplayURLImplTest {
     public void testProjectInFolder() throws Exception {
         MockFolder folder = j.createFolder("test");
         Project p = folder.createProject(FreeStyleProject.class, "abc");
+        p.setDisplayName("custom name");
         String url = getPath(displayURL.getJobURL(p));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/", url);
 
@@ -161,6 +162,26 @@ public class BlueOceanDisplayURLImplTest {
         url = getPath(displayURL.getChangesURL(job.getFirstBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/changes", url);
     }
+
+    @Test
+    public void testMultibranchUrlsWithDisplayNameBranches() throws Exception {
+        repo.checkoutNewBranch("feature/test-1")
+                .writeJenkinsFile(JenkinsFile.createFile().node().stage("stage1").echo("test").endNode())
+                .addFile("Jenkinsfile")
+                .commit("Initial commit to feature/test-1");
+
+        MultiBranchTestBuilder mp = MultiBranchTestBuilder.createProjectInFolder(j, "folder", "test", gitSampleRepoRule);
+
+        WorkflowJob job = mp.scheduleAndFindBranchProject("feature%2Ftest-1");
+        job.setDisplayName("Custom Name");
+        String url = getPath(displayURL.getRunURL(job.getFirstBuild()));
+
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/", url);
+
+        url = getPath(displayURL.getChangesURL(job.getFirstBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/changes", url);
+    }
+
 
     @Test
     public void testMultibranchUrls_CustomOrganization() throws Exception {
