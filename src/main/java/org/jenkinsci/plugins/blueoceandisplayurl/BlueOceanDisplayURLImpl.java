@@ -49,6 +49,11 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     @Override
+    public String getName() {
+        return "blueocean";
+    }
+
+    @Override
     public String getRoot() {
         Jenkins jenkins = Jenkins.getInstance();
         String root = jenkins.getRootUrl();
