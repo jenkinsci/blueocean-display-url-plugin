@@ -56,12 +56,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     @Override
     @Nonnull
     public String getRoot() {
-        Jenkins jenkins = Jenkins.getInstance();
-        String root = jenkins.getRootUrl();
-        if (root == null) {
-            root = "http://unconfigured-jenkins-location/";
-        }
-        return root + "blue/";
+        return super.getRoot() + "blue/";
     }
 
     @Override
@@ -167,7 +162,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
      */
     private static ItemGroup<?> getBaseGroup(BlueOrganization org) {
         ItemGroup<?> group = null;
-        if (org != null && org instanceof AbstractOrganization) {
+        if (org instanceof AbstractOrganization) {
             group = ((AbstractOrganization) org).getGroup();
         }
         return group;
