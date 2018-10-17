@@ -137,7 +137,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
      *
      * @param org the organization the item belongs to
      * @param item to return the full name of
-     * @return
+     * @return full name relative to <code>BlueOrganization</code> base
      */
     private static String getFullNameForItem(@Nullable BlueOrganization org, @Nonnull Item item) {
         ItemGroup<?> group = getBaseGroup(org);
@@ -149,7 +149,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
      *
      * @param org the organization the item belongs to
      * @param itemGroup to return the full name of
-     * @return
+     * @return full name relative to <code>BlueOrganization</code> base
      */
     private static String getFullNameForItemGroup(@Nullable BlueOrganization org, @Nonnull ItemGroup itemGroup) {
         if (itemGroup instanceof Item) {
