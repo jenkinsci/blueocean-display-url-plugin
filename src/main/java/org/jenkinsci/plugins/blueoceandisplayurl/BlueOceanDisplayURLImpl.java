@@ -54,6 +54,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     @Override
+    @Nonnull
     public String getRoot() {
         Jenkins jenkins = Jenkins.getInstance();
         String root = jenkins.getRootUrl();
@@ -64,6 +65,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     @Override
+    @Nonnull
     public String getRunURL(Run<?, ?> run) {
         BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(run.getParent());
         if (organization == null || !isSupported(run)) {
@@ -83,6 +85,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     @Override
+    @Nonnull
     public String getChangesURL(Run<?, ?> run) {
         if (isSupported(run)) {
             return getRunURL(run) + "changes";
@@ -92,6 +95,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     @Override
+    @Nonnull
     public String getJobURL(Job<?, ?> job) {
         BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(job);
         if (organization == null || !isSupported(job)) {
@@ -100,6 +104,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         return getJobURL(organization, job);
     }
 
+    @Nonnull
     private String getJobURL(BlueOrganization organization, Job<?, ?> job) {
         String jobPath = job.getParent() instanceof MultiBranchProject ? getFullNameForItemGroup(organization, job.getParent()) : getFullNameForItem(organization, job);
         return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(jobPath));
@@ -122,6 +127,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         return false;
     }
 
+    @Nonnull
     private String getJobURL(BlueOrganization organization, MultiBranchProject<?, ?> project) {
         return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(getFullNameForItem(organization, project)));
     }
