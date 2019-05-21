@@ -1,21 +1,21 @@
 package org.jenkinsci.plugins.blueoceandisplayurl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-import javax.servlet.ServletException;
-
-import org.acegisecurity.AccessDeniedException;
+import com.cloudbees.hudson.plugins.folder.Folder;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import hudson.model.FreeStyleProject;
+import hudson.model.ItemGroup;
+import hudson.model.Project;
+import io.jenkins.blueocean.rest.model.BlueOrganization;
+import io.jenkins.blueocean.service.embedded.OrganizationFactoryImpl;
+import io.jenkins.blueocean.service.embedded.rest.OrganizationImpl;
+import jenkins.branch.BranchProperty;
+import jenkins.branch.BranchSource;
+import jenkins.branch.DefaultBranchPropertyStrategy;
+import jenkins.model.Jenkins;
+import jenkins.plugins.git.GitSCMSource;
+import jenkins.plugins.git.GitSampleRepoRule;
+import jenkins.scm.api.SCMSource;
 import org.jenkinsci.plugins.displayurlapi.DisplayURLProvider;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject;
@@ -26,46 +26,16 @@ import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.MockFolder;
 import org.jvnet.hudson.test.TestExtension;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
-import org.kohsuke.stapler.WebMethod;
-import org.kohsuke.stapler.verb.DELETE;
-import org.springframework.util.CollectionUtils;
 
-import com.cloudbees.hudson.plugins.folder.Folder;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import edu.umd.cs.findbugs.annotations.CheckForNull;
-import edu.umd.cs.findbugs.annotations.NonNull;
-import hudson.model.FreeStyleProject;
-import hudson.model.ItemGroup;
-import hudson.model.Project;
-import hudson.model.TopLevelItem;
-import hudson.model.TopLevelItemDescriptor;
-import hudson.model.User;
-import io.jenkins.blueocean.commons.ServiceException;
-import io.jenkins.blueocean.rest.ApiHead;
-import io.jenkins.blueocean.rest.factory.organization.AbstractOrganization;
-import io.jenkins.blueocean.rest.factory.organization.OrganizationFactory;
-import io.jenkins.blueocean.rest.hal.Link;
-import io.jenkins.blueocean.rest.model.BlueOrganization;
-import io.jenkins.blueocean.rest.model.BluePipelineContainer;
-import io.jenkins.blueocean.rest.model.BlueUser;
-import io.jenkins.blueocean.rest.model.BlueUserContainer;
-import io.jenkins.blueocean.service.embedded.OrganizationFactoryImpl;
-import io.jenkins.blueocean.service.embedded.rest.OrganizationImpl;
-import io.jenkins.blueocean.service.embedded.rest.PipelineContainerImpl;
-import io.jenkins.blueocean.service.embedded.rest.UserContainerImpl;
-import io.jenkins.blueocean.service.embedded.rest.UserImpl;
-import jenkins.branch.BranchProperty;
-import jenkins.branch.BranchSource;
-import jenkins.branch.DefaultBranchPropertyStrategy;
-import jenkins.model.Jenkins;
-import jenkins.model.ModifiableTopLevelItemGroup;
-import jenkins.plugins.git.GitSCMSource;
-import jenkins.plugins.git.GitSampleRepoRule;
-import jenkins.scm.api.SCMSource;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author Ivan Meredith
