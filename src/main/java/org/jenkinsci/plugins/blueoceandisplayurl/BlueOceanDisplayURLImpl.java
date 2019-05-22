@@ -1,6 +1,8 @@
 package org.jenkinsci.plugins.blueoceandisplayurl;
 
 import com.google.common.collect.ImmutableSet;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
 import hudson.Functions;
 import hudson.Util;
@@ -19,9 +21,6 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 
 import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  *`@author Ivan Meredith
@@ -43,23 +42,25 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     );
 
     @Override
+    @NonNull
     public String getDisplayName() {
         return "Blue Ocean";
     }
 
     @Override
+    @NonNull
     public String getName() {
         return "blueocean";
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public String getRoot() {
         return super.getRoot() + "blue/";
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public String getRunURL(Run<?, ?> run) {
         BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(run.getParent());
         if (organization == null || !isSupported(run)) {
@@ -79,7 +80,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public String getChangesURL(Run<?, ?> run) {
         if (isSupported(run)) {
             return getRunURL(run) + "changes";
@@ -89,7 +90,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public String getJobURL(Job<?, ?> job) {
         BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(job);
         if (organization == null || !isSupported(job)) {
@@ -98,7 +99,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         return getJobURL(organization, job);
     }
 
-    @Nonnull
+    @NonNull
     private String getJobURL(BlueOrganization organization, Job<?, ?> job) {
         String jobPath = job.getParent() instanceof MultiBranchProject ? getFullNameForItemGroup(organization, job.getParent()) : getFullNameForItem(organization, job);
         return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(jobPath));
@@ -121,7 +122,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         return false;
     }
 
-    @Nonnull
+    @NonNull
     private String getJobURL(BlueOrganization organization, MultiBranchProject<?, ?> project) {
         return String.format("%sorganizations/%s/%s/", getRoot(), Util.rawEncode(organization.getName()), Util.rawEncode(getFullNameForItem(organization, project)));
     }
@@ -133,7 +134,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
      * @param item to return the full name of
      * @return full name relative to <code>BlueOrganization</code> base
      */
-    private static String getFullNameForItem(@Nullable BlueOrganization org, @Nonnull Item item) {
+    private static String getFullNameForItem(@CheckForNull BlueOrganization org, @NonNull Item item) {
         ItemGroup<?> group = getBaseGroup(org);
         return Functions.getRelativeNameFrom(item, group);
     }
@@ -145,7 +146,7 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
      * @param itemGroup to return the full name of
      * @return full name relative to <code>BlueOrganization</code> base
      */
-    private static String getFullNameForItemGroup(@Nullable BlueOrganization org, @Nonnull ItemGroup itemGroup) {
+    private static String getFullNameForItemGroup(@CheckForNull BlueOrganization org, @NonNull ItemGroup itemGroup) {
         if (itemGroup instanceof Item) {
             return getFullNameForItem(org, (Item)itemGroup);
         } else {
