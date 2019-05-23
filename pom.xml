@@ -18,7 +18,7 @@
     <jenkins-test-harness.version>2.44</jenkins-test-harness.version>
     <blueocean.version>1.16.0</blueocean.version>
     <scm-api.version>2.4.1</scm-api.version>
-    <git.version>3.6.0</git.version>
+    <git.version>3.10.0</git.version>
   </properties>
 
   <name>Display URL for Blue Ocean</name>
