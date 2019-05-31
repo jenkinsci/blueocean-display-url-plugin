@@ -48,7 +48,7 @@ public class BlueOceanDisplayURLImplTest {
     @Rule
     public GitSampleRepoRule gitSampleRepoRule = new GitSampleRepoRule();
 
-    DisplayURLProvider displayURL;
+    BlueOceanDisplayURLImpl displayURL;
 
     private GitUtil repo;
 
@@ -95,6 +95,11 @@ public class BlueOceanDisplayURLImplTest {
         url = getPath(displayURL.getChangesURL(p.getLastBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/detail/abc/1/changes", url);
 
+        url = getPath(displayURL.getTestsURL(p.getLastBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/detail/abc/1/tests", url);
+
+        url = getPath(displayURL.getArtifactsURL(p.getLastBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/detail/abc/1/artifacts", url);
     }
 
     @Test
@@ -112,6 +117,11 @@ public class BlueOceanDisplayURLImplTest {
         url = getPath(displayURL.getChangesURL(p.getLastBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/TestOrg/test%2Fabc/detail/abc/1/changes", url);
 
+        url = getPath(displayURL.getTestsURL(p.getLastBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/TestOrg/test%2Fabc/detail/abc/1/tests", url);
+
+        url = getPath(displayURL.getArtifactsURL(p.getLastBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/TestOrg/test%2Fabc/detail/abc/1/artifacts", url);
     }
 
     @Test
@@ -131,6 +141,12 @@ public class BlueOceanDisplayURLImplTest {
 
         url = getPath(displayURL.getChangesURL(job.getFirstBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/changes", url);
+
+        url = getPath(displayURL.getTestsURL(job.getFirstBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/tests", url);
+
+        url = getPath(displayURL.getArtifactsURL(job.getFirstBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/artifacts", url);
     }
 
     @Test
@@ -150,6 +166,12 @@ public class BlueOceanDisplayURLImplTest {
 
         url = getPath(displayURL.getChangesURL(job.getFirstBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/changes", url);
+
+        url = getPath(displayURL.getArtifactsURL(job.getFirstBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/artifacts", url);
+
+        url = getPath(displayURL.getTestsURL(job.getFirstBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/tests", url);
     }
 
 
@@ -170,12 +192,18 @@ public class BlueOceanDisplayURLImplTest {
 
         url = getPath(displayURL.getChangesURL(job.getFirstBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/TestOrg/folder%2Ftest/detail/feature%2Ftest-1/1/changes", url);
+
+        url = getPath(displayURL.getTestsURL(job.getFirstBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/TestOrg/folder%2Ftest/detail/feature%2Ftest-1/1/tests", url);
+
+        url = getPath(displayURL.getArtifactsURL(job.getFirstBuild()));
+        Assert.assertEquals("/jenkins/blue/organizations/TestOrg/folder%2Ftest/detail/feature%2Ftest-1/1/artifacts", url);
     }
 
     MockFolder orgFolder;
     @Before
     public void setUp() throws IOException {
-        displayURL = Iterables.find(DisplayURLProvider.all(), Predicates.instanceOf(BlueOceanDisplayURLImpl.class));
+        displayURL = new BlueOceanDisplayURLImpl(); //Iterables.find(DisplayURLProvider.all(), Predicates.instanceOf(BlueOceanDisplayURLImpl.class));
         orgFolder = j.createFolder("TestOrgFolderName");
         orgFolder.setDisplayName("TestOrgFolderName Display Name");
     }

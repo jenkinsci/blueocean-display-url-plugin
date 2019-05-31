@@ -91,6 +91,28 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         }
     }
 
+    /**
+     * Fully qualified URL for a page that displays tests for a project.
+     */
+    public String getTestsURL(Run<?, ?> run) {
+        if (isSupported(run)) {
+            return getRunURL(run) + "tests";
+        } else {
+            return DisplayURLProvider.getDefault().getRunURL(run);
+        }
+    }
+
+    /**
+     * Fully qualified URL for a page that displays artifacts for a project.
+     */
+    public String getArtifactsURL(Run<?, ?> run) {
+        if (isSupported(run)) {
+            return getRunURL(run) + "artifacts";
+        } else {
+            return DisplayURLProvider.getDefault().getRunURL(run);
+        }
+    }
+
     @Override
     public String getJobURL(Job<?, ?> job) {
         BlueOrganization organization = OrganizationFactory.getInstance().getContainingOrg(job);
