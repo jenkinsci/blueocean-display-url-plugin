@@ -3,7 +3,6 @@ package org.jenkinsci.plugins.blueoceandisplayurl;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.model.EnvironmentContributor;
-import hudson.model.Job;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import org.jenkinsci.plugins.displayurlapi.DisplayURLContext;
