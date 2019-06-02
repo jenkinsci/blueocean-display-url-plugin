@@ -83,11 +83,29 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
     }
 
     @Override
+    public String getArtifactsURL(Run<?, ?> run) {
+        if (isSupported(run)) {
+            return getRunURL(run) + "artifacts";
+        } else {
+            return DisplayURLProvider.getDefault().getArtifactsURL(run);
+        }
+    }
+
+    @Override
     public String getChangesURL(Run<?, ?> run) {
         if (isSupported(run)) {
             return getRunURL(run) + "changes";
         } else {
             return DisplayURLProvider.getDefault().getChangesURL(run);
+        }
+    }
+
+    @Override
+    public String getTestsURL(Run<?, ?> run) {
+        if (isSupported(run)) {
+            return getRunURL(run) + "tests";
+        } else {
+            return DisplayURLProvider.getDefault().getTestsURL(run);
         }
     }
 
@@ -166,5 +184,4 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
         }
         return group;
     }
-
 }
