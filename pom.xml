@@ -17,7 +17,7 @@
     <java.level>8</java.level>
     <jenkins-test-harness.version>2.50</jenkins-test-harness.version>
     <blueocean.version>1.16.0</blueocean.version>
-    <scm-api.version>2.4.1</scm-api.version>
+    <scm-api.version>2.5.0</scm-api.version>
     <git.version>3.10.0</git.version>
   </properties>
 
