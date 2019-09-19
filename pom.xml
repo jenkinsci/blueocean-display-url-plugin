@@ -18,6 +18,7 @@
     <blueocean.version>1.16.0</blueocean.version>
     <scm-api.version>2.4.1</scm-api.version>
     <git.version>3.10.0</git.version>
+    <slf4jVersion>1.7.26</slf4jVersion>
   </properties>
 
   <name>Display URL for Blue Ocean</name>
@@ -112,7 +113,7 @@
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
-      <version>1.9</version>
+      <version>1.12</version>
     </dependency>
     <dependency>
       <groupId>org.ow2.asm</groupId>
