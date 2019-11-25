@@ -251,6 +251,7 @@ public class BlueOceanDisplayURLImplTest {
             return new MultiBranchTestBuilder(j, mp);
         }
 
+
         public WorkflowJob scheduleAndFindBranchProject(String name) throws Exception {
             mp.scheduleBuild2(0).getFuture().get();
             return findBranchProject(name);
@@ -269,6 +270,7 @@ public class BlueOceanDisplayURLImplTest {
             return p;
         }
     }
+
 
     public static class JenkinsFile {
         private String file = "";
