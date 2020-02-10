@@ -2,7 +2,6 @@ package org.jenkinsci.plugins.blueoceandisplayurl;
 
 import com.cloudbees.hudson.plugins.folder.Folder;
 import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
 import hudson.model.FreeStyleProject;
 import hudson.model.ItemGroup;
 import hudson.model.Project;
@@ -175,7 +174,7 @@ public class BlueOceanDisplayURLImplTest {
     MockFolder orgFolder;
     @Before
     public void setUp() throws IOException {
-        displayURL = Iterables.find(DisplayURLProvider.all(), Predicates.instanceOf(BlueOceanDisplayURLImpl.class));
+        displayURL = DisplayURLProvider.all().stream().filter(Predicates.instanceOf(BlueOceanDisplayURLImpl.class)::apply).findFirst().get();
         orgFolder = j.createFolder("TestOrgFolderName");
         orgFolder.setDisplayName("TestOrgFolderName Display Name");
     }
