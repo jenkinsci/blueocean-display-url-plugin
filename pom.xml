@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>3.50</version>
+    <version>4.3</version>
   </parent>
 
   <artifactId>blueocean-display-url</artifactId>
@@ -13,7 +13,7 @@
   <packaging>hpi</packaging>
 
   <properties>
-    <jenkins.version>2.121.1</jenkins.version>
+    <jenkins.version>2.176.4</jenkins.version>
     <java.level>8</java.level>
     <blueocean.version>1.16.0</blueocean.version>
     <scm-api.version>2.4.1</scm-api.version>
@@ -57,6 +57,30 @@
       <url>https://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.jenkins.tools.bom</groupId>
+        <artifactId>bom-2.176.x</artifactId>
+        <version>9</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-annotations</artifactId>
+        <version>3.1.12</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>io.jenkins.blueocean</groupId>
@@ -127,7 +151,6 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>structs</artifactId>
-      <version>1.19</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.main</groupId>
@@ -138,12 +161,10 @@
     <dependency>
       <groupId>org.jenkins-ci</groupId>
       <artifactId>annotation-indexer</artifactId>
-      <version>1.12</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>script-security</artifactId>
-      <version>1.58</version>
     </dependency>
   </dependencies>
 
