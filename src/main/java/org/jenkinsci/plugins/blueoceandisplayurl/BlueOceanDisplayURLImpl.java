@@ -81,11 +81,31 @@ public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
     @Override
     @NonNull
+    public String getArtifactsURL(Run<?, ?> run) {
+        if (isSupported(run)) {
+            return getRunURL(run) + "artifacts";
+        } else {
+            return DisplayURLProvider.getDefault().getArtifactsURL(run);
+        }
+    }
+
+    @Override
+    @NonNull
     public String getChangesURL(Run<?, ?> run) {
         if (isSupported(run)) {
             return getRunURL(run) + "changes";
         } else {
             return DisplayURLProvider.getDefault().getChangesURL(run);
+        }
+    }
+
+    @Override
+    @NonNull
+    public String getTestsURL(Run<?, ?> run) {
+        if (isSupported(run)) {
+            return getRunURL(run) + "tests";
+        } else {
+            return DisplayURLProvider.getDefault().getTestsURL(run);
         }
     }
 
