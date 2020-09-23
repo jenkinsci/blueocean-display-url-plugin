@@ -135,6 +135,7 @@ public class BlueOceanDisplayURLImplTest {
         MultiBranchTestBuilder mp = MultiBranchTestBuilder.createProjectInFolder(j, "folder", "test", gitSampleRepoRule);
 
         WorkflowJob job = mp.scheduleAndFindBranchProject("feature%2Ftest-1");
+        j.waitUntilNoActivity();
 
         String url = getPath(displayURL.getRunURL(job.getFirstBuild()));
 
@@ -161,6 +162,8 @@ public class BlueOceanDisplayURLImplTest {
 
         WorkflowJob job = mp.scheduleAndFindBranchProject("feature%2Ftest-1");
         job.setDisplayName("Custom Name");
+        j.waitUntilNoActivity();
+
         String url = getPath(displayURL.getRunURL(job.getFirstBuild()));
 
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/folder%2Ftest/detail/feature%2Ftest-1/1/", url);
@@ -185,6 +188,7 @@ public class BlueOceanDisplayURLImplTest {
         MultiBranchTestBuilder mp = MultiBranchTestBuilder.createProjectInFolder(j, "folder", "test", gitSampleRepoRule, orgFolder);
 
         WorkflowJob job = mp.scheduleAndFindBranchProject("feature%2Ftest-1");
+        j.waitUntilNoActivity();
 
         String url = getPath(displayURL.getRunURL(job.getFirstBuild()));
 
