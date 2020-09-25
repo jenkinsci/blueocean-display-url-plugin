@@ -101,6 +101,7 @@ public class BlueOceanDisplayURLImplTest {
 
         url = getPath(displayURL.getTestsURL(p.getLastBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/jenkins/test%2Fabc/detail/abc/1/tests", url);
+        j.waitUntilNoActivity();
     }
 
     @Test
@@ -123,6 +124,7 @@ public class BlueOceanDisplayURLImplTest {
 
         url = getPath(displayURL.getTestsURL(p.getLastBuild()));
         Assert.assertEquals("/jenkins/blue/organizations/TestOrg/test%2Fabc/detail/abc/1/tests", url);
+        j.waitUntilNoActivity();
     }
 
     @Test
