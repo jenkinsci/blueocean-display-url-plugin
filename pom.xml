@@ -13,11 +13,11 @@
   <packaging>hpi</packaging>
 
   <properties>
-    <jenkins.version>2.176.4</jenkins.version>
+    <jenkins.version>2.222.4</jenkins.version>
     <java.level>8</java.level>
     <blueocean.version>1.16.0</blueocean.version>
-    <scm-api.version>2.6.3</scm-api.version>
-    <git.version>3.10.0</git.version>
+    <scm-api.version>2.6.4</scm-api.version>
+    <git.version>4.4.5</git.version>
   </properties>
 
   <name>Display URL for Blue Ocean</name>
@@ -62,8 +62,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.176.x</artifactId>
-        <version>11</version>
+        <artifactId>bom-2.222.x</artifactId>
+        <version>15</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -71,6 +71,11 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-annotations</artifactId>
         <version>4.1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>script-security</artifactId>
+        <version>1.75</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -101,12 +106,10 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-job</artifactId>
-      <version>2.32</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-multibranch</artifactId>
-      <version>2.21</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
