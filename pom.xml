@@ -17,7 +17,7 @@
     <java.level>8</java.level>
     <blueocean.version>1.16.0</blueocean.version>
     <scm-api.version>2.6.3</scm-api.version>
-    <git.version>3.10.0</git.version>
+    <git.version>4.4.5</git.version>
   </properties>
 
   <name>Display URL for Blue Ocean</name>
