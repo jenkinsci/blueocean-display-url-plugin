@@ -18,6 +18,7 @@
     <blueocean.version>1.16.0</blueocean.version>
     <scm-api.version>2.6.4</scm-api.version>
     <git.version>4.4.5</git.version>
+    <asm.version>9.0</asm.version>
   </properties>
 
   <name>Display URL for Blue Ocean</name>
@@ -144,12 +145,12 @@
     <dependency>
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm-util</artifactId>
-      <version>5.0.3</version>
+      <version>${asm.version}</version>
     </dependency>
     <dependency>
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm-analysis</artifactId>
-      <version>5.0.3</version>
+      <version>${asm.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
