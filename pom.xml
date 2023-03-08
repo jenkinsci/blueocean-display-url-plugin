@@ -38,7 +38,7 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/jenkinsci/blueocean-display-url-plugin.git</connection>
+    <connection>scm:git:https://github.com/jenkinsci/blueocean-display-url-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/blueocean-display-url-plugin.git</developerConnection>
     <url>http://github.com/jenkinsci/blueocean-display-url-plugin</url>
     <tag>HEAD</tag>
