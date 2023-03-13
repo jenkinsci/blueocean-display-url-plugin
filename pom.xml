@@ -14,7 +14,7 @@
 
   <properties>
     <jenkins.version>2.332.1</jenkins.version>
-    <blueocean.version>1.25.7</blueocean.version>
+    <blueocean.version>1.27.2</blueocean.version>
     <scm-api.version>631.v9143df5b_e4a_a</scm-api.version>
   </properties>
 
