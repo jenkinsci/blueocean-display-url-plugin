@@ -1,20 +1,18 @@
 package org.jenkinsci.plugins.blueoceandisplayurl;
 
 import com.cloudbees.hudson.plugins.folder.Folder;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
+import hudson.ExtensionList;
 import hudson.model.FreeStyleProject;
 import hudson.model.ItemGroup;
 import hudson.model.Project;
 import io.jenkins.blueocean.rest.model.BlueOrganization;
 import io.jenkins.blueocean.service.embedded.OrganizationFactoryImpl;
 import io.jenkins.blueocean.service.embedded.rest.OrganizationImpl;
-import jenkins.branch.BranchProperty;
 import jenkins.branch.BranchSource;
-import jenkins.branch.DefaultBranchPropertyStrategy;
 import jenkins.model.Jenkins;
 import jenkins.plugins.git.GitSCMSource;
 import jenkins.plugins.git.GitSampleRepoRule;
+import jenkins.plugins.git.traits.BranchDiscoveryTrait;
 import jenkins.scm.api.SCMSource;
 import org.jenkinsci.plugins.displayurlapi.DisplayURLProvider;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
@@ -209,7 +207,7 @@ public class BlueOceanDisplayURLImplTest {
     MockFolder orgFolder;
     @Before
     public void setUp() throws IOException {
-        displayURL = Iterables.find(DisplayURLProvider.all(), Predicates.instanceOf(BlueOceanDisplayURLImpl.class));
+        displayURL = ExtensionList.lookupSingleton(BlueOceanDisplayURLImpl.class);
         orgFolder = j.createFolder("TestOrgFolderName");
         orgFolder.setDisplayName("TestOrgFolderName Display Name");
     }
@@ -235,8 +233,7 @@ public class BlueOceanDisplayURLImplTest {
             }
 
             WorkflowMultiBranchProject mp = folder.createProject(WorkflowMultiBranchProject.class, name);
-            mp.getSourcesList().add(new BranchSource(new GitSCMSource(null, gitRepo.toString(), "", "*", "", false),
-                    new DefaultBranchPropertyStrategy(new BranchProperty[0])));
+            mp.getSourcesList().add(createBranchSource(gitRepo));
 
             for (SCMSource source : mp.getSCMSources()) {
                 assertEquals(mp, source.getOwner());
@@ -245,10 +242,16 @@ public class BlueOceanDisplayURLImplTest {
             return new MultiBranchTestBuilder(j, mp);
         }
 
+        private static BranchSource createBranchSource(GitSampleRepoRule gitRepo) {
+            GitSCMSource gitSCMSource = new GitSCMSource(gitRepo.toString());
+            gitSCMSource.getTraits().add(new BranchDiscoveryTrait());
+            BranchSource branchSource = new BranchSource(gitSCMSource);
+            return branchSource;
+        }
+
         public static MultiBranchTestBuilder createProject(JenkinsRule j, String name, GitSampleRepoRule gitRepo) throws IOException {
             WorkflowMultiBranchProject mp = j.jenkins.createProject(WorkflowMultiBranchProject.class, name);
-            mp.getSourcesList().add(new BranchSource(new GitSCMSource(null, gitRepo.toString(), "", "*", "", false),
-                    new DefaultBranchPropertyStrategy(new BranchProperty[0])));
+            mp.getSourcesList().add(createBranchSource(gitRepo));
 
             for (SCMSource source : mp.getSCMSources()) {
                 assertEquals(mp, source.getOwner());
@@ -317,13 +320,13 @@ public class BlueOceanDisplayURLImplTest {
             "testProjectInFolder_CustomOrganization",
             "testMultibranchUrls_CustomOrganization" })
     public static class TestOrganizationFactoryImpl extends OrganizationFactoryImpl {
-        private OrganizationImpl instance = new OrganizationImpl("TestOrg", Jenkins.getInstance().getItem("/TestOrgFolderName", Jenkins.getInstance(), MockFolder.class));
+        private OrganizationImpl instance = new OrganizationImpl("TestOrg", Jenkins.get().getItem("/TestOrgFolderName", Jenkins.get(), MockFolder.class));
 
         @Override
         public OrganizationImpl get(String name) {
             if (instance != null) {
                 if (instance.getName().equals(name)) {
-                    System.out.println("" + name + " Intance returned " + instance);
+                    System.out.println("" + name + " Instance returned " + instance);
                     return instance;
                 }
             }
