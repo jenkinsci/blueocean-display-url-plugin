@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>4.47</version>
+    <version>4.60</version>
   </parent>
 
   <artifactId>blueocean-display-url</artifactId>
@@ -13,9 +13,8 @@
   <packaging>hpi</packaging>
 
   <properties>
-    <jenkins.version>2.332.1</jenkins.version>
+    <jenkins.version>2.361.4</jenkins.version>
     <blueocean.version>1.25.7</blueocean.version>
-    <scm-api.version>631.v9143df5b_e4a_a</scm-api.version>
   </properties>
 
   <name>Display URL for Blue Ocean</name>
@@ -40,7 +39,7 @@
   <scm>
     <connection>scm:git:https://github.com/jenkinsci/blueocean-display-url-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/blueocean-display-url-plugin.git</developerConnection>
-    <url>http://github.com/jenkinsci/blueocean-display-url-plugin</url>
+    <url>https://github.com/jenkinsci/blueocean-display-url-plugin</url>
     <tag>HEAD</tag>
   </scm>
   <repositories>
@@ -60,20 +59,10 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.332.x</artifactId>
-        <version>1607.va_c1576527071</version>
+        <artifactId>bom-2.361.x</artifactId>
+        <version>2000.v4677a_6e0ffea</version>
         <scope>import</scope>
         <type>pom</type>
-      </dependency>
-      <dependency>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>script-security</artifactId>
-        <version>1175.v4b_d517d6db_f0</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -93,15 +82,19 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>display-url-api</artifactId>
-      <version>2.3.6</version>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-job</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>branch-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-multibranch</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
@@ -121,40 +114,13 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>scm-api</artifactId>
-      <version>${scm-api.version}</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.15</version>
-    </dependency>
-    <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm-analysis</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins</groupId>
-      <artifactId>structs</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.main</groupId>
-      <artifactId>jenkins-test-harness-tools</artifactId>
-      <version>2.2</version>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci</groupId>
-      <artifactId>annotation-indexer</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins</groupId>
-      <artifactId>script-security</artifactId>
     </dependency>
   </dependencies>
 

@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.blueoceandisplayurl;
 
-import com.google.common.collect.ImmutableSet;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
@@ -28,13 +27,13 @@ import java.util.Set;
 @Extension
 public class BlueOceanDisplayURLImpl extends DisplayURLProvider {
 
-    private static final Set<String> SUPPORTED_RUNS = ImmutableSet.of(
+    private static final Set<String> SUPPORTED_RUNS = Set.of(
             FreeStyleBuild.class.getName(),
             WorkflowRun.class.getName(),
             "hudson.maven.AbstractMavenBuild"
     );
 
-    private static final Set<String> SUPPORTED_JOBS = ImmutableSet.of(
+    private static final Set<String> SUPPORTED_JOBS = Set.of(
             WorkflowJob.class.getName(),
             MultiBranchProject.class.getName(),
             FreeStyleProject.class.getName(),
