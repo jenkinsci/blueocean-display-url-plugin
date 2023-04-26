@@ -14,7 +14,7 @@
 
   <properties>
     <jenkins.version>2.361.4</jenkins.version>
-    <blueocean.version>1.25.7</blueocean.version>
+    <blueocean.version>1.27.3</blueocean.version>
   </properties>
 
   <name>Display URL for Blue Ocean</name>
