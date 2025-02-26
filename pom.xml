@@ -10,12 +10,11 @@
   </parent>
 
   <artifactId>blueocean-display-url</artifactId>
-  <version>${revision}${changelist}</version>
+  <version>${changelist}</version>
   <packaging>hpi</packaging>
 
   <properties>
-    <revision>2.4.4</revision>
-    <changelist>-SNAPSHOT</changelist>
+    <changelist>999999-SNAPSHOT</changelist>
     <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
     <jenkins.baseline>2.387</jenkins.baseline>
     <jenkins.version>${jenkins.baseline}.3</jenkins.version>
