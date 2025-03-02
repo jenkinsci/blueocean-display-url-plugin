@@ -1,0 +1,2 @@
+_extends: .github
+tag-template: blueocean-display-url-$NEXT_MINOR_VERSION
